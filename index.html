@@ -53,13 +53,17 @@ function create () {
     this.input.on('gameobjectup', function (pointer, gameObject) {
         gameObject.emit('clicked', gameObject);
     }, this);
+
     itemText = this.add.text(16, 16, 'test', {fontFamily: "Trebuchet MS", fontSize: '32px', fill: '#000000' });
 }
 
 function addInv(gameObject){
-    itemText.setText(apple.gaeilge);
     gameObject.isKnown = true;
     gameObject.inInventory += 1;
+    itemText.setText(gameObject.gaeilge + ": " + gameObject.inInventory);
+    gameObject.off('clicked', addInv);
+    gameObject.input.enabled = false;
+    gameObject.setVisible(false);
 }
 
 function update ()
