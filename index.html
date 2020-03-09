@@ -1,7 +1,7 @@
 <!doctype html> 
 <html lang="en"> 
 <head> 
-    <meta charset="UTF-8" />
+    <!--<meta charset="UTF-8" />-->
     <title>Project Gaeilge</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.22.0/dist/phaser.js"></script>
     <style type="text/css">
@@ -28,7 +28,6 @@ var config = {
 
 var itemText;
 var apple = {
-    pic: 'apple',
     bearla: "apple",
     gaeilge: "úll",
     theForm: "an t-úll",
@@ -45,16 +44,27 @@ function preload () {
 
 function create () {
     this.add.image(400, 300, 'bg');
-    this.add.image(200, 450, apple.pic).setScale(.5);
-    itemText = this.add.text(16, 16, 'test', {fontFamily: "Trebuchet MS", fontSize: '32px', fill: '#000000' });
+    apple = this.add.image(200, 450, 'apple');//.setScale();
     //  note for later: when clicking the tree, make an apple fall and bounce similar to stars in tutorial
+
+    apple.setInteractive();
+    apple.on('clicked', addInv, this);
+
+    this.input.on('gameobjectup', function (pointer, gameObject) {
+        gameObject.emit('clicked', gameObject);
+    }, this);
+    itemText = this.add.text(16, 16, 'test', {fontFamily: "Trebuchet MS", fontSize: '32px', fill: '#000000' });
+}
+
+function addInv(gameObject){
+    itemText.setText(apple.gaeilge);
+    gameObject.isKnown = true;
+    gameObject.inInventory += 1;
 }
 
 function update ()
 {
-    if(game.input.activePointer.isDown){
-        itemText.setText(apple.gaeilge)
-    }
+
 }
 
 </script>
