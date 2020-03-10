@@ -35,46 +35,40 @@ function preload () {
 
 var itemText;
 var invItem = {
-    //pic,
     bearla: "apple",
     gaeilge: "úll",
-    theForm: "an t-úll",
     isKnown: false,
     inInventory: 0,
-    addInv: function(){
-        invItem.isKnown = true;
-        invItem.inInventory += 1;
-        itemText.setText(invItem.gaeilge + ": " + invItem.inInventory);
-        invItem.off('clicked', invItem.addInv);
-        invItem.pic.input.enabled = false;
-        invItem.pic.setVisible(false);
-    }
+    addInv: addInv
 };
 
 function create () {
     this.add.image(400, 300, 'bg');
-    var apple = Object.create(invItem);//.setScale();
-    apple.pic = this.add.image(200, 450, 'picApple');
+    var apple = Object.create(invItem);
+    apple.pic = this.add.image(400, 300, 'picApple');
     //  note for later: when clicking the tree, make an apple fall and bounce similar to stars in tutorial
 
+    itemText = this.add.text(16, 16, 'test', {fontFamily: "Trebuchet MS", fontSize: '32px', fill: '#000000' });
     apple.pic.setInteractive();
     apple.pic.on('clicked', apple.addInv);
+    apple.pic.on('clicked', hideObj, this);
 
     this.input.on('gameobjectup', function (pointer, gameObject) {
         gameObject.emit('clicked', gameObject);
     }, this);
-
-    itemText = this.add.text(16, 16, 'test', {fontFamily: "Trebuchet MS", fontSize: '32px', fill: '#000000' });
 }
 
-/*function addInv(newItem){
-    newItem.isKnown = true;
-    newItem.inInventory += 1;
-    itemText.setText(newItem.gaeilge + ": " + newItem.inInventory);
-    newItem.off('clicked', addInv);
-    newItem.input.enabled = false;
-    newItem.setVisible(false);
-}*/
+function addInv(){
+    invItem.isKnown = true;
+    invItem.inInventory += 1;
+    itemText.setText(invItem.gaeilge + ": " + invItem.inInventory);
+}
+
+function hideObj(invItem){ //couldn't figure out how to combine addInv and hideObj so I made two seperate functions
+    invItem.off('clicked', invItem.addInv);
+    invItem.input.enabled = false;
+    invItem.setVisible(false);
+}
 
 function update ()
 {
