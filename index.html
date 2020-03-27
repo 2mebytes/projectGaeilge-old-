@@ -29,9 +29,9 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload () {
-    this.load.image('bg', 'assets/bg.png');
+    this.load.image('bg', 'assets/bg2.png');
     this.load.image('picApple', 'assets/apple.png');
-    this.load.image('picPerson', 'assets/person.png');
+    this.load.image('picPerson', 'assets/person2.png');
 }
 
 var itemText;
@@ -39,11 +39,11 @@ var invItem = {
     bearla: "apple",
     gaeilge: "úll",
     isKnown: false,
-    inInventory: 0,
+    inInv: 0,
     addInv: function(){
         invItem.isKnown = true;
-        invItem.inInventory += 1;
-        itemText.setText(invItem.gaeilge + ": " + invItem.inInventory);
+        invItem.inInv += 1;
+        itemText.setText(invItem.gaeilge + ": " + invItem.inInv);
     }
 };
 var apple = Object.create(invItem);
@@ -74,8 +74,15 @@ function hideObj(invItem){ //couldn't figure out how to combine addInv and hideO
 }
 
 function convo(personConvo){
-    convoText.setText("Hi, I want one " + apple.gaeilge + ". Can you help me?");
-    personConvo.off('clicked', personConvo.convo);
+    if (apple.inInv >= 1) {
+        convoText.setText("Thank you for an " + apple.gaeilge + "!");
+        apple.inInv -= 1;
+        itemText.setText(apple.gaeilge + ": " + apple.inInv);
+    }
+    else{
+        convoText.setText("Hi, I want one " + apple.gaeilge + ". Can you help me?");
+    }
+    //personConvo.off('clicked', personConvo.convo);
 }
 
 function update ()
